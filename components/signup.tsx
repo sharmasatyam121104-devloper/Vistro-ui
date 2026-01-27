@@ -39,7 +39,7 @@ const Signup = () => {
             <Card className="md:w-112.5 sm:w-100 relative z-50 shadow-lg animate__animated animate__slideInUp animate__faster">
                 <CardHeader>
                     <div className='w-full flex  justify-center'>
-                        <Logo height={40} width={40} priority/>
+                        <Logo height={40} width={40} textSize='xxl' priority/>
                     </div>
                     <CardTitle className='text-4xl font-bold'>Otp Verification</CardTitle>
                     <CardDescription>Check your mobile phone</CardDescription>
