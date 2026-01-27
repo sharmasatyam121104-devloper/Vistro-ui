@@ -1,4 +1,4 @@
-import MainLayout from "@/components/MainLayout";
+import MainLayout from "@/components/main-layout";
 import type { Metadata } from "next"
 import './globals.css'
 
