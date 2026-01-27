@@ -5,15 +5,13 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/material.css'
 import { Button } from './ui/button'
 import { ArrowRight } from 'lucide-react'
-import {Form, Input} from 'antd'
+import {Form} from 'antd'
 import { useState } from 'react'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from './ui/input-otp'
 import Logo from './shared/logo'
 import Link from 'next/link'
 
-interface handleSignupInterface {
-    fullname: string
-    email: string
+interface handleLoginInterface {
     mobile: string
 }
 
@@ -21,10 +19,10 @@ interface handleVerifyOtpInterface {
     otp: number
 }
 
-const Signup = () => {
+const Login = () => {
     const [sent, setSent] = useState(false)
 
-    const handleSignup= (value: handleSignupInterface)=>{
+    const handleLogin= (value: handleLoginInterface)=>{
         console.log(value);
     }
 
@@ -75,25 +73,11 @@ const Signup = () => {
                     <div className='w-full flex  justify-center'>
                         <Logo height={40} width={40} priority/>
                     </div>
-                    <CardTitle className='text-4xl font-bold'>Register Now</CardTitle>
-                    <CardDescription>Signup up to use services !</CardDescription>
+                    <CardTitle className='text-4xl font-bold'>Login Now</CardTitle>
+                    <CardDescription>Wecome back again !</CardDescription>
                 </CardHeader>
                 <CardContent className=''>
-                    <Form onFinish={handleSignup}>
-                        <Form.Item name={"fullname"} rules={[{required:true}]}>
-                            <Input
-                                className='py-6 w-full h-16'
-                                placeholder='Enter your name!'
-                            />
-                        </Form.Item>
-
-                        <Form.Item name={"email"} rules={[{required:true}]}>
-                            <Input
-                                className='py-6 w-full h-16'
-                                placeholder='Email id'
-                            />
-                        </Form.Item>
-
+                    <Form onFinish={handleLogin}>
                         <Form.Item name={"mobile"} rules={[{required:true}]}>
                             <PhoneInput
                                 country={'in'}
@@ -109,10 +93,10 @@ const Signup = () => {
                         </Form.Item>
                     </Form>
                     <CardFooter>
-                        <CardDescription>Already have an account..?</CardDescription>
-                        <Link href={"/login"}>
+                        <CardDescription>Don&#39;t have an account..?</CardDescription>
+                        <Link href={"/signup"}>
                             <Button variant={"link"}>
-                            login
+                            Signup
                         </Button>
                         </Link>
                     </CardFooter>
@@ -125,7 +109,7 @@ const Signup = () => {
       {/* Gradient Background Circle */}
       <div
         className="
-          bg-linear-to-r from-indigo-500 via-sky-500 to-cyan-400
+          bg-linear-to-r from-purple-600 via-indigo-600 to-cyan-500
           w-140 h-195
           sm:w-190 sm:h-190
           md:w-270 md:h-270
@@ -140,4 +124,4 @@ const Signup = () => {
   )
 }
 
-export default Signup
+export default Login
