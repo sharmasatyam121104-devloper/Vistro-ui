@@ -124,3 +124,6 @@
   }
 }
 
+.capitalize-first::first-letter {
+  text-transform: uppercase;
+}

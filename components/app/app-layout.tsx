@@ -57,7 +57,7 @@ const dockItems = [
 
 const AppLayout: FC<ChildrenInterface> = ({ children }) => {
   const pathname = usePathname()
-  const pageTitle = pathname.split("/").pop()
+  const pageTitle = pathname.split("/").pop()?.split("-").join(" ")
 
   return (
     <SidebarProvider>
@@ -102,7 +102,7 @@ const AppLayout: FC<ChildrenInterface> = ({ children }) => {
         {/* Page header */}
         <div className="px-6 md:px-18 py-8 space-y-7">
           <CardHeader className="p-0">
-            <CardTitle className="text-3xl capitalize font-semibold">
+            <CardTitle className="text-3xl capitalize-first font-semibold">
               {pageTitle}
             </CardTitle>
             <CardDescription>
