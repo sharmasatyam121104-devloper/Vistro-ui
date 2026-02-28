@@ -19,7 +19,7 @@ const Videos = () => {
               className="
                 flex flex-col gap-4 p-4
                 sm:flex-row sm:items-center sm:justify-between
-              "
+                "
             >
               {/* LEFT */}
               <div className="flex items-center gap-4">

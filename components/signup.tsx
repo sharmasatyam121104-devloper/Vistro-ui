@@ -4,12 +4,15 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/material.css'
 import { Button } from './ui/button'
-import { ArrowRight } from 'lucide-react'
-import {Form, Input} from 'antd'
+import { ArrowRight, Loader2 } from 'lucide-react'
+import {Form, Input, message} from 'antd'
 import { useState } from 'react'
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from './ui/input-otp'
 import Logo from './shared/logo'
 import Link from 'next/link'
+import clientCatchError from '@/lib/clientCatchError'
+import httpRequest from '@/lib/http'
+import { useRouter } from 'next/navigation'
 
 interface handleSignupInterface {
     fullname: string
@@ -18,18 +21,56 @@ interface handleSignupInterface {
 }
 
 interface handleVerifyOtpInterface {
+    mobile: string
     otp: number
 }
 
 const Signup = () => {
     const [sent, setSent] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [mobile, setMobile] = useState<string>("")
+    const router = useRouter()
 
-    const handleSignup= (value: handleSignupInterface)=>{
-        console.log(value);
+    const handleSignup = async(value: handleSignupInterface)=>{
+        try {
+            setLoading(true)
+            const payload = {
+                fullname: value.fullname,
+                email: value.email,
+                mobile: `+${value.mobile}`
+            }
+            const {data} = await httpRequest.post('/auth/signup', payload)
+            message.success(data.message)
+            setSent(true)
+            setMobile(value.mobile)
+        } 
+        catch (error) {
+            return clientCatchError(error) 
+        }
+        finally {
+            setLoading(false)
+        }
     }
 
-    const handleVerifyOtp = (value:handleVerifyOtpInterface)=>{
-        console.log(value);
+    const handleVerifyOtp = async(value:handleVerifyOtpInterface)=>{
+        try {
+            setLoading(true)
+            const payload = {
+                mobile: `+${mobile}`,
+                otp: value.otp
+            }
+            const {data} = await httpRequest.post('/auth/verify-otp', payload)
+            message.success(data.message)
+            setSent(true)
+            setMobile("")
+            router.replace('/app')
+        } 
+        catch (error) {
+            return clientCatchError(error) 
+        }
+        finally {
+            setLoading(false)
+        }
     }
 
   return (
@@ -61,9 +102,22 @@ const Signup = () => {
                             </InputOTP>
                         </Form.Item>
                         <Form.Item >
-                            <Button size={'lg'} className='py-6 w-full text-base font-semibold bg-zinc-700 hover:bg-zinc-900'>
-                                <ArrowRight/>
+                            <Button
+                            disabled={loading}
+                            size="lg"
+                            className="py-6 w-full text-base font-semibold bg-zinc-700 hover:bg-zinc-900"
+                            >
+                            {loading ? (
+                                <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Verifying...
+                                </>
+                            ) : (
+                                <>
+                                <ArrowRight className="mr-2 h-4 w-4" />
                                 Verify
+                                </>
+                            )}
                             </Button>
                         </Form.Item>
                     </Form>
@@ -102,9 +156,22 @@ const Signup = () => {
                         </Form.Item>
                         
                         <Form.Item >
-                            <Button size={'lg'} className='py-6 w-full text-base font-semibold bg-zinc-700 hover:bg-zinc-900'>
-                                <ArrowRight/>
-                                Next
+                            <Button
+                                disabled={loading}
+                                size="lg"
+                                className="py-6 w-full text-base font-semibold bg-zinc-700 hover:bg-zinc-900 flex items-center justify-center"
+                            >
+                                {loading ? (
+                                    <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Processing...
+                                    </>
+                                ) : (
+                                    <>
+                                    Next
+                                    <ArrowRight className="ml-2 h-4 w-4" />
+                                    </>
+                                )}
                             </Button>
                         </Form.Item>
                     </Form>
