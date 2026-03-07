@@ -5,7 +5,7 @@ const HomeRouter = () => {
   return (
     <div className='w-8/12'>
       <VideoPlayer 
-        src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+        src="https://vistro-server.s3.ap-southeast-1.amazonaws.com/streams/sample.m3u8"
       />
     </div>
   )
