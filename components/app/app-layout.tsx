@@ -21,6 +21,8 @@ import {
 
 import { FloatingDock } from "../ui/floating-dock"
 import { CardDescription, CardHeader, CardTitle } from "../ui/card"
+import {io} from 'socket.io-client'
+export const webSocket = io(process.env.NEXT_PUBLIC_SERVER)
 
 import {
   BellIcon,

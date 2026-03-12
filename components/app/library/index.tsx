@@ -5,11 +5,12 @@ import clientCatchError from '@/lib/clientCatchError'
 import fetcher from '@/lib/fetcher'
 import httpRequest from '@/lib/http'
 import { Divider, Form, Input, Modal, Table, Tag, Button as AntBtn, message, Skeleton, Empty, Pagination, Progress } from 'antd'
-import axios from 'axios'
+import axios, { AxiosProgressEvent } from 'axios'
 import { Upload } from 'lucide-react'
 import moment from 'moment'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import useSwr, { mutate } from 'swr'
+import { webSocket } from '../app-layout'
 
 export interface VideoInterface  {
     user: string
@@ -48,6 +49,18 @@ const Library = () => {
     `/video?page=${page}&limit=${limit}`,
     fetcher
   )
+
+  const onVideoTransCodind = ()=>{
+    mutate(`/video?page=${page}&limit=${limit}`)
+  }
+
+  useEffect(()=>{
+    webSocket.on("video-transcoding", onVideoTransCodind)
+
+    return ()=>{
+      webSocket.off("video-transcoding", onVideoTransCodind)
+    }
+  },[])
   
   //For pagination
   const onPaginate = (p: number, l: number)=>{
@@ -102,8 +115,10 @@ const Library = () => {
         headers: {
           'Content-Type': file.type
         },
-        onUploadProgress: (e: any)=>{
-          const p = Math.floor((e.loaded*100)/e.total);
+        onUploadProgress: (e: AxiosProgressEvent)=>{
+          if (!e.total) return;
+          
+          const p = Math.floor((e.loaded*100)/e?.total);
           setProgress(p)
         }
       }
@@ -170,7 +185,7 @@ const Library = () => {
         if (status === VideoStatusEnum.progressing) color = "blue";
         if (status === VideoStatusEnum.draft) color = "orange";
 
-        return <Tag color={color}>{status}</Tag>;
+        return <Tag color={color} className='capitalize'>{status}</Tag>;
       },
     },
     {
