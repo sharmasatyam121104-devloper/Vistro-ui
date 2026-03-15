@@ -1,51 +1,20 @@
-'use client'
-import React, { FC, useEffect, useRef } from 'react'
-import videoJs from "video.js"
-import "video.js/dist/video-js.css"
-import "videojs-hls-quality-selector"
-import "videojs-hotkeys"
+import React, { FC } from 'react'
+import ReactPlayer from 'react-player'
+import { ReactPlayerProps } from 'react-player/types';
 
-interface VideoPlayerInterface {
-    src: string
+
+
+const VideoPlayer: FC<ReactPlayerProps> = ({ ...rest}) => {
+  return (
+    <ReactPlayer
+        controls
+        width = {"100%"}
+        height={"100%"}
+        style={{maxWidth: "100%", maxHeight: "100%"}}
+        {...rest}
+        className='w-full! max-w-5xl! mx-auto! aspect-video!'
+    />
+  );
 }
 
-const VideoPlayer: FC<VideoPlayerInterface> = ({src}) => {
-    const videoRef = useRef<HTMLVideoElement | null>(null)
-
-    const options = {
-        controls: true,
-        fluid: true,
-        playbackRates: [0.5, 1, 1.5, 2],
-        // muted: true
-    }
-
-    useEffect(()=>{
-        if(!videoRef.current)
-            return
-
-        const player: any = videoJs(videoRef.current, options)
-        player.hlsQualitySelector({
-            displayCurrentQuality: true
-        })
-
-        player.hotkeys({
-            volumeStep: 0.1,
-            seekStep: 20
-        })
-
-        player.focus()
-    }, [])
-
-    return (
-        <div className='w-full'>
-            <video
-                ref={videoRef}
-                className='video-js vjs-default-skin '
-            >
-                <source src={src} type="application/x-mpegURL" />
-            </video>
-        </div>
-    )
-}
-
-export default VideoPlayer
+export default VideoPlayer;
