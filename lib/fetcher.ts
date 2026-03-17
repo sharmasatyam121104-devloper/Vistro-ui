@@ -7,7 +7,7 @@ const fetcher = async(url: string) => {
         return data
     } 
     catch (error) {
-       return clientCatchError(error) 
+       throw clientCatchError(error) 
     }
 }
 

@@ -255,9 +255,18 @@ const Library = () => {
     return <Skeleton active />
   }
 
-  if(error) {
-    return <Empty description={error.message}/>
+  if (error) {
+    return (
+      <Empty 
+        description={
+          error?.response?.data?.message ||
+          error?.message ||
+          "Something went wrong while fetching videos."
+        } 
+      />
+    )
   }
+  
 
 
   return (
@@ -267,13 +276,13 @@ const Library = () => {
         <p>Uplaod Video</p>
       </Button>
 
-      {
+      { 
         data?.total === 0 
           ?
           <Empty description={"You haven’t uploaded any videos yet. Please upload a video to get started."}/>
           : 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-2">
-            {data.data.map((item: VideoInterface, index: number) => {
+            {data?.data?.map((item: VideoInterface, index: number) => {
               const image = item?.thumbnail?.medium || item?.thumbnail?.high || item?.thumbnail?.low;
               const durationData = calcDuration(item.duration);
 
@@ -374,7 +383,7 @@ const Library = () => {
       {/* Pegination */}
       <div className='flex justify-end mt-2'>
         <Pagination
-          total={data.total}
+          total={data?.total}
           onChange={onPaginate}
           pageSize={limit}
           current={page}
